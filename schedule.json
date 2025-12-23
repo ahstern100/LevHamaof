@@ -1,0 +1,89 @@
+{
+  "shabbat_schedule": {
+    "friday_night": {
+      "title": "ליל שבת",
+      "events": [
+        {
+          "activity": "הדלקת נרות",
+          "activity_en": "candle_lighting",
+          "time": "hebcal"
+        },
+        {
+          "activity": "שיר השירים",
+          "activity_en": "shir_hashirim",
+          "time": "as candle_lighting rounded to 5 downwards"
+        },
+        {
+          "activity": "מנחה",
+          "activity_en": "mincha_friday",
+          "time": "as shir_hashirim + 10 minutes"
+        },
+        {
+          "activity": "קבלת שבת",
+          "activity_en": "kabbalat_shabbat",
+          "time": null
+        },
+        {
+          "activity": "דבר תורה",
+          "activity_en": "dvar_torah_friday",
+          "time": null
+        },
+        {
+          "activity": "ערבית",
+          "activity_en": "arvit_friday",
+          "time": null
+        }
+      ]
+    },
+    "shabbat_day": {
+      "title": "יום השבת",
+      "events": [
+        {
+          "activity": "שחרית",
+          "activity_en": "shacharit",
+          "time": "08:15"
+        },
+        {
+          "activity": "קידוש דיבורים",
+          "activity_en": "kiddush_diburim",
+          "time": "10:15"
+        },
+        {
+          "activity": "דבר תורה",
+          "activity_en": "dvar_torah_shabbat",
+          "time": "10:25"
+        },
+        {
+          "activity": "תפילת ילדים",
+          "activity_en": "children_prayer",
+          "time": "10:40"
+        }
+      ]
+    },
+    "afternoon_evening": {
+      "title": "אחה\"צ",
+      "events": [
+        {
+          "activity": "מנחה",
+          "activity_en": "mincha_shabbat",
+          "time": "2 hours before shabbat_end rounded to 15 upwards, and not before 15:45"
+        },
+        {
+          "activity": "ערבית",
+          "activity_en": "arvit_motzaei",
+          "time": "10 minutes before shabbat_end rounded to 5 minutes upwards"
+        },
+        {
+          "activity": "צאת שבת",
+          "activity_en": "shabbat_end",
+          "time": "hebcal"
+        }
+      ]
+    },
+    "notes": [
+      {
+        "content": "ההורים נדרשים להשגיח על ילדיהם"
+      }
+    ]
+  }
+}
