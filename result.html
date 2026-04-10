@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לו"ז שבת - תצוגה</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="ui-bg">
+    <div class="download-btns" style="text-align: center; margin-bottom: 15px; display: none;">
+    <button onclick="downloadJPG()" class="save-btn" style="width: auto; padding: 5px 15px; font-size: 0.8rem; background: #2e7d32;">JPG ⬇️</button>
+    <button onclick="downloadPDF()" class="save-btn" style="width: auto; padding: 5px 15px; font-size: 0.8rem; background: #1565c0;">PDF ⬇️</button>
+</div>
+    <a href="index.html" class="back-to-edit">ערוך שוב ✎</a>
+    <div id="ui-logo-container" class="logo-wrapper" style="display:none;">
+        <img id="ui-logo" src="" alt="Logo">
+    </div>
+    <div class="container">
+        <div id="ui-header" class="header-main"></div>
+        <br>
+        <div id="ui-hebDate" class="date-pill"></div>
+
+        <div class="shabbat-times-pill">
+            <div class="time-section">
+                <span id="ui-label-candles" class="time-label"></span>
+                <span id="ui-time-candles" class="time-value"></span>
+            </div>
+            <div class="divider"></div>
+            <div class="time-section">
+                <span id="ui-label-havdalah" class="time-label"></span>
+                <span id="ui-time-havdalah" class="time-value"></span>
+            </div>
+        </div>
+
+        <div class="schedule-grid">
+            <div class="card full-height">
+                <div id="ui-title-night" class="card-title night"></div>
+                <div id="ui-night-rows"></div>
+            </div>
+
+            <div class="card">
+                <div id="ui-title-day" class="card-title day"></div>
+                <div id="ui-day-rows"></div>
+                
+                <div id="ui-container-birkat" class="sub-container" style="display:none;">
+                    <div id="ui-birkat-title" class="sub-title"></div>
+                    <div id="ui-molad-text" class="sub-text"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div id="ui-title-afternoon" class="card-title afternoon"></div>
+                <div id="ui-afternoon-rows"></div>
+                
+                <div id="ui-container-levana" class="sub-container" style="display:none;">
+                    <div class="sub-title">קידוש לבנה 🌙</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="ui-notice" class="footer-notice" style="display:none;"></div>
+        <div id="ui-footer-btn" class="footer-btn"></div>
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        function renderResult() {
+            const c = JSON.parse(localStorage.getItem('shabbatConfig'));
+            if (!c) return;
+
+            // רקע והגדרות כלליות
+            if(c.bgImage) document.getElementById('ui-bg').style.backgroundImage = `url(${c.bgImage})`;
+            document.getElementById('ui-header').innerText = c.header;
+            document.getElementById('ui-hebDate').innerText = `★ ${c.hebDate} ★`;
+            
+            // אליפסה עליונה
+            document.getElementById('ui-label-candles').innerText = c.candlesLabel;
+            document.getElementById('ui-time-candles').innerText = c.candlesTime;
+            document.getElementById('ui-label-havdalah').innerText = c.havdalahLabel;
+            document.getElementById('ui-time-havdalah').innerText = c.havdalahTime;
+
+            // ליל שבת
+            document.getElementById('ui-title-night').innerText = c.nightTitle;
+            renderRows('ui-night-rows', c.nightRows);
+
+            // יום השבת
+            document.getElementById('ui-title-day').innerText = c.dayTitle;
+            renderRows('ui-day-rows', c.dayRows);
+            if(c.showBirkat) {
+                document.getElementById('ui-container-birkat').style.display = 'block';
+                document.getElementById('ui-birkat-title').innerText = c.birkatTitle;
+                document.getElementById('ui-molad-text').innerText = c.moladText;
+            }
+
+            // אחה"צ
+            document.getElementById('ui-title-afternoon').innerText = c.afternoonTitle;
+            renderRows('ui-afternoon-rows', c.afternoonRows);
+            if(c.showLevana) document.getElementById('ui-container-levana').style.display = 'block';
+
+            // הודעות ותחתית
+            if(c.notice) {
+                const noticeEl = document.getElementById('ui-notice');
+                noticeEl.style.display = 'flex';
+                noticeEl.innerText = c.notice;
+            }
+            document.getElementById('ui-footer-btn').innerText = c.footerText;
+        }
+
+        function renderRows(containerId, rows) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            rows.forEach(row => {
+                if(!row.label && !row.time) return;
+                const div = document.createElement('div');
+                div.className = 'row';
+                div.innerHTML = `<span class="time">${row.time}</span><span>${row.label}</span>`;
+                container.appendChild(div);
+            });
+        }
+        
+        function setupCommunityLogo(url) {
+    const container = document.getElementById('ui-logo-container');
+    const logoImg = document.getElementById('ui-logo');
+    
+    if (url && url.trim() !== "") {
+        logoImg.src = url;
+        container.style.display = 'flex'; // שימוש ב-flex ליישור פנימי
+    } else {
+        container.style.display = 'none';
+    }
+        }
+
+
+
+        window.onload = function() {
+            const c = JSON.parse(localStorage.getItem('shabbatConfig'));
+            if (c) {
+                renderResult();
+                setupCommunityLogo(c.logoUrl);
+            }
+        }
+        
+        async function downloadJPG() {
+    const element = document.querySelector('.container');
+    const btn = event.target;
+    const originalText = btn.innerText;
+    
+    try {
+        btn.innerText = "מעבד..."; // אינדיקציה למשתמש
+        
+        const canvas = await html2canvas(element, {
+            useCORS: true,
+            scale: 2, // איכות גבוהה
+            logging: false,
+            backgroundColor: null
+        });
+        
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+        const link = document.createElement('a');
+        link.download = `לוז_שבת_${new Date().toLocaleDateString('he-IL')}.jpg`;
+        link.href = dataUrl;
+        
+        // הוספה זמנית למסמך כדי להבטיח שהקליק יעבוד בדפדפנים מסוימים
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+    } catch (err) {
+        console.error("JPG Error:", err);
+        alert("שגיאה ביצירת התמונה. נסה שוב.");
+    } finally {
+        btn.innerText = originalText;
+    }
+}
+
+async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const element = document.querySelector('.container');
+    const btn = event.target;
+    const originalText = btn.innerText;
+    
+    try {
+        btn.innerText = "מכין PDF...";
+        
+        const canvas = await html2canvas(element, {
+            useCORS: true,
+            scale: 2,
+            logging: false
+        });
+        
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        
+        // חישוב גודל התמונה כך שתתאים לרוחב ה-A4
+        const imgProps = pdf.getImageProperties(imgData);
+        const imgWidth = pdfWidth - 20; // שוליים של 10 מ"מ מכל צד
+        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+        
+        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+        pdf.save(`לוז_שבת_${new Date().toLocaleDateString('he-IL')}.pdf`);
+        
+    } catch (err) {
+        console.error("PDF Error:", err);
+        alert("שגיאה ביצירת ה-PDF.");
+    } finally {
+        btn.innerText = originalText;
+    }
+}
+    </script>
+</body>
+</html>

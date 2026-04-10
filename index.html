@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>עריכת לו"ז שבת</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="edit-mode">
+    <div class="edit-container">
+        <h2 class="edit-title">ניהול לו"ז דינמי</h2>
+        
+        <div class="edit-section">
+            <h3>הגדרות בסיס</h3>
+            <div class="edit-row"><input type="text" id="header" placeholder="פרשה"><input type="text" id="hebDate" placeholder="תאריך"></div>
+            <div class="edit-row"><input type="text" id="candlesLabel" value="כניסת שבת"><input type="text" id="candlesTime"></div>
+            <div class="edit-row"><input type="text" id="havdalahLabel" value="צאת שבת"><input type="text" id="havdalahTime"></div>
+        </div>
+        
+        <div class="edit-section">
+            <input type="text" class="section-title-input" id="nightTitle" value="ליל שבת 🌙">
+            <div id="night-rows-edit"></div>
+            <button class="add-row-btn" onclick="addRow('night-rows-edit')">+</button>
+        </div>
+        
+        <div class="edit-section">
+            <input type="text" class="section-title-input" id="dayTitle" value="יום השבת ☀️">
+            <div id="day-rows-edit"></div>
+            <button class="add-row-btn" onclick="addRow('day-rows-edit')">+</button>
+            <div class="special-box">
+                <label><input type="checkbox" id="showBirkat"> ברכת החודש</label>
+                <input type="text" id="birkatTitle" placeholder="מברכים חודש...">
+                <input type="text" id="moladText" placeholder="המולד">
+            </div>
+        </div>
+        
+        <div class="edit-section">
+            <input type="text" class="section-title-input" id="afternoonTitle" value="אחה&quot;צ 🔅">
+            <div id="afternoon-rows-edit"></div>
+            <button class="add-row-btn" onclick="addRow('afternoon-rows-edit')">+</button>
+            <div class="special-box"><label><input type="checkbox" id="showLevana"> קידוש לבנה</label></div>
+        </div>
+        
+        <div class="form-group">
+           <label>כתובת לוגו (URL):</label>
+            <input type="text" id="logoUrl" value="https://raw.githubusercontent.com/ahstern100/LevHamaof/refs/heads/main/%D7%9C%D7%95%D7%92%D7%95%20%D7%9C%D7%91%20%D7%94%D7%9E%D7%A2%D7%95%D7%A3.png">
+</div>
+        
+        <div class="edit-section">
+            <input type="text" id="bgImage" value="background.jpg">
+            <textarea id="notice" placeholder="הודעה חשובה..."></textarea>
+            <input type="text" id="footerText" value="שבת שלום!">
+        </div>
+        
+        <button class="save-btn" onclick="saveAndShow()">הצג תוצאה</button>
+    </div>
+    <script src="edit.js"></script>
+</body>
+</html>
